@@ -4,4 +4,5 @@
 Main technologies: JavaScript, Node.js, Express.js, Sequelize ORM<br>
 Auxiliary technologies: HTML, CSS, Pug, SQL<br>
 Complexity level: Intermediate<br>
+Estimated Time to Complete: 30 hours<br>
 Concepts: SQL ORM, SQL RDBMS, SQL CRUD operations, AJAX, Routes, Middleware, HTTP requests, Request Object, Response Object, Server, Static Assets, Pug Template rendering<br>
