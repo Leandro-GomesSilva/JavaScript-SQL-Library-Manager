@@ -7,6 +7,22 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+// Importing the instance of 'sequelize' that was instantiated in the models/index.js file
+const db = require('./models/index');
+
+// Testing the connection to the database and synchronizing the model
+(async () => {
+  await db.sequelize.sync();
+  
+  try {
+    await db.sequelize.authenticate();
+    console.log('The connection to the database was successful!');    // Connection successful
+  } catch (error) {
+    console.error('An error occurred when connecting to the database: ', error);    // Connection not successful
+  }
+})();
+
+
 var app = express();
 
 // view engine setup
