@@ -6,6 +6,7 @@ const {Book} = require('../models')
 
 /* GET home page. */
 router.get('/', async (req, res, next) => { 
+  console.log("Home route called.");
   const books = await Book.findAll();   // Storing all books from the Model into a variable
   res.json(books);  // Sending a JSON response
 });

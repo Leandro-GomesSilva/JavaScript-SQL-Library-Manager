@@ -22,7 +22,6 @@ const db = require('./models/index');
   }
 })();
 
-
 var app = express();
 
 // view engine setup
@@ -35,23 +34,72 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+/******* ROUTES *******/
+
+// Home route
+app.use('/', indexRouter);
+
+// Books List route
+app.get('/books', (req, res) => {  
+  console.log("Route 'Books' called.");
+  res.render('books', "");
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// Create New Book Form route
+app.get('/books/new', (req, res) => {  
+  console.log("Route 'Create New Book Form' called.");
+  res.render('books', "");
+});
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+// Post New Book route
+app.post('/books/new', (req, res) => {  
+  console.log("Route 'Post New Book' called.");
+  res.render('books', "");
+});
+
+// Show Book Detail Form route
+app.get('/books/:id', (req, res) => {  
+  console.log(`Route 'Book ${id} Detail Form' called.`);
+  res.render('books', "");
+});
+
+// Update Book Info route
+app.post('/books/:id', (req, res) => {  
+  console.log(`Route 'Book ${id} Info Update' called.`);
+  res.render('books', "");
+});
+
+// Delete Book route
+app.post('/books/:id/delete', (req, res) => {  
+  console.log(`Route 'Delete Book ${id}' called.`);
+  res.render('books', "");
+});
+
+
+/******* ERROR HANDLERS *******/
+
+// Handling 404 errors
+app.use((req, res, next) => {
+  const err = new Error();
+  err.status = 404;
+  err.message = "Page not found. Check details of the error on the screen.";
+  res.render('page-not-found', {err});
+  next(err);
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  
+  if (err.status === 404) {
+      res.status(err.status);   // Setting the response status to the error status, although it wasn't directly mentioned in the instructions
+  } else {
+      err.status = err.status || 500;
+      err.message = err.message || "Server error. Check the Error Stack below for more details.";
+      console.log("Error status: ", err.status, err.message);
+      res.status(err.status);   // Setting the response status to the error status, although it wasn't directly mentioned in the instructions
+      res.render('error', {err});                    
+  }
 });
 
 module.exports = app;
