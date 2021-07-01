@@ -49,7 +49,7 @@ app.get('/books', (req, res) => {
 // Create New Book Form route
 app.get('/books/new', (req, res) => {  
   console.log("Route 'Create New Book Form' called.");
-  res.render('books', "");
+  res.render('new-book', {title: "New Book"});
 });
 
 // Post New Book route
@@ -61,7 +61,7 @@ app.post('/books/new', (req, res) => {
 // Show Book Detail Form route
 app.get('/books/:id', (req, res) => {  
   console.log(`Route 'Book ${id} Detail Form' called.`);
-  res.render('books', "");
+  res.render('update-book', {title: "A Brief History of Time"});
 });
 
 // Update Book Info route
@@ -84,7 +84,11 @@ app.use((req, res, next) => {
   const err = new Error();
   err.status = 404;
   err.message = "Page not found. Check details of the error on the screen.";
-  res.render('page-not-found', {err});
+
+  console.log(err.message, "Error status:", err.status);    // Displaying error message and status on the console, although it wasn't directly mentioned in the instructions
+  res.status(err.status);   // Setting the response status to the error status, although it wasn't directly mentioned in the instructions
+  res.render('page-not-found', {err, title: "Page not Found"});
+  
   next(err);
 });
 
@@ -92,11 +96,12 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   
   if (err.status === 404) {
-      res.status(err.status);   // Setting the response status to the error status, although it wasn't directly mentioned in the instructions
+      return;
   } else {
       err.status = err.status || 500;
       err.message = err.message || "Server error. Check the Error Stack below for more details.";
-      console.log("Error status: ", err.status, err.message);
+      
+      console.log("Error status:", err.status, err.message);
       res.status(err.status);   // Setting the response status to the error status, although it wasn't directly mentioned in the instructions
       res.render('error', {err});                    
   }
