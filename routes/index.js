@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-// Importing the Book model
-const {Book} = require('../models')
+const {Book} = require('../models')   // Importing the Book model
 
 /* GET home page. */
 router.get('/', async (req, res, next) => { 
-  console.log("Home route called.");
+  console.log("Redirecting to '/books'");
   const books = await Book.findAll();   // Storing all books from the Model into a variable
-  res.json(books);  // Sending a JSON response
+  //res.json(books);  // Sending a JSON response
+  res.redirect('/books');
 });
 
 module.exports = router;
