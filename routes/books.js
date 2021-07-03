@@ -39,29 +39,52 @@ router.get('/books', asyncHandler( async (req, res) => {
 // Create New Book route
 router.get('/books/new', (req, res) => {  
   console.log('Create New Book route called');
-  res.render('new-book', {title: "New Book"});    // Rendering 'new-book' and passing the title to the pug template
+  res.render('new-book', { title: "New Book", book: {} });    // Rendering 'new-book', passing the title to the pug template and passing an empty book object to render empty form fields in the template
 });
 
 // Post New Book route
 router.post('/books/new', asyncHandler( async (req, res) => {  
-  console.log('New Book POST route called. Redirecting to the Home route.');
-  const book = await Book.create(req.body);   // Using Sequelize to create an entry in the database
-  res.redirect('/books');
+  let book;
+
+  try {
+    book = await Book.create(req.body);   // Using Sequelize to create an entry in the database
+    console.log('New Book POST route called. Redirecting to the Home route.');
+    res.redirect('/books');
+
+  } catch (error) {
+
+    if (error.name === "SequelizeValidationError") {    // In case a sequelize validation error is thrown, this if block will run
+      book = await Book.build(req.body);    // Saving the previous entered form information into a variable
+      res.render('new-book', { title: "New Book", book, validationErrors: error.errors })   // Re-rendering the 'new-book' and passing the previously entered book information and the error object to the template
+    }
+  }
 }));
 
 // Update Book GET route
 router.get('/books/:id', asyncHandler( async (req, res) => {  
   console.log('Update Book route called.');
   const book = await Book.findByPk(req.params.id);    // Selecting the book with the corresponding ID from the database
-  res.render('update-book', { book: book });    // Rendering 'update-book' and passing the corresponding book entry from the database to the pug template
+  res.render('update-book', { book });    // Rendering 'update-book' and passing the corresponding book entry from the database to the pug template
 }));
 
 // Update Book POST route
 router.post('/books/:id', asyncHandler( async (req, res) => {  
-  console.log('Update Book POST route called. Redirecting to the Home route.');
-  const book = await Book.findByPk(req.params.id);    // Selecting the book with the corresponding ID from the database
-  await book.update(req.body);    // Updating the book with the corresponding ID with the info passed from the form via the post method and the request body
-  res.redirect('/books');
+  let book;
+  
+  try {
+    book = await Book.findByPk(req.params.id);    // Selecting the book with the corresponding ID from the database
+    await book.update(req.body);    // Updating the book with the corresponding ID with the info passed from the form via the post method and the request body
+    console.log('Update Book POST route called. Redirecting to the Home route.');
+    res.redirect('/books');
+
+  } catch (error) {
+
+    if (error.name === "SequelizeValidationError") {    // In case a sequelize validation error is thrown, this if block will run
+      book = await Book.build(req.body);    // Saving the previous entered form information into a variable
+      book.id = req.params.id;    // Since the book id is not present in the request body, this line adds it as property to the book object
+      res.render('update-book', { book, validationErrors: error.errors });    // Re-rendering the 'update-book' and passing the previously entered book information and the error object to the template
+    }
+  }
 }));
 
 // Delete Book route

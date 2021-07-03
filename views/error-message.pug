@@ -1,0 +1,5 @@
+if(validationErrors)
+  h2.validationError Not so fast!
+  ul
+    each validationError in validationErrors
+      li= validationError.message
