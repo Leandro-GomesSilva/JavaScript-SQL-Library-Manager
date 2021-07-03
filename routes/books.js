@@ -37,9 +37,10 @@ router.get('/books', asyncHandler( async (req, res) => {
   console.log("Home Route called.");
   
   let books;
+  let numberOfBooks;
   const search = req.query.search;
   const page = req.query.page;
-  const booksPerPage = 5;
+  const booksPerPage = 10;
 
   if(!search && !page) {
     res.redirect('/books?page=1');
@@ -49,9 +50,10 @@ router.get('/books', asyncHandler( async (req, res) => {
     return;
   }
 
+  // If there is a search query in the URL, this block runs
   if (search) {
     console.log("Performing search.");
-    books = await Book.findAll({    // Storing books related to the Search Query into a variable
+    books = await Book.findAndCountAll({    // Storing books related to the Search Query into a variable
       where: {    // Using an OR operator, matching any substring in any attribute to the query string
         [Op.or]: [
           { title: {[Op.substring]: search.toLowerCase()} },
@@ -62,15 +64,15 @@ router.get('/books', asyncHandler( async (req, res) => {
       },
       limit: booksPerPage,
       offset: (page - 1) * booksPerPage
-    });   
+    });
+    numberOfBooks = books.count;    // After the await command above is done, the number of books is stored in this variable
+    books = books.rows;   // The variable 'books' in then re-written with the actually book rows.
   }  else {
-    books = await Book.findAll({ limit: booksPerPage, offset: (page - 1) * booksPerPage });     // In case the search query from the req object is empty, stores all books from the Model into a variable
+    books = await Book.findAll({ limit: booksPerPage, offset: (page - 1) * booksPerPage });     // In case the search query from the req object is empty, stores all books from the Model into a variable respecting limit and offset
+    numberOfBooks = await Book.count();   // Counts the number of books in the database (without limit and offset)
   }  
   
-  const numberOfBooks = await Book.count();
-
   const numberOfPages = Math.ceil(numberOfBooks/booksPerPage);
-
 
   res.render('index', { title: "SQL Library Manager", books, search, numberOfPages });    // Rendering the template with the books list
 }));

@@ -1,8 +1,8 @@
 - var n = 1;
-ul 
-  while n <= numberOfPages
-    li 
-      if(search)
-        a.button(href=`/books?search=${search}&page=${n}`)= n++
-      else
-        a.button(href=`/books?page=${n}`)= n++
+ 
+while n <= numberOfPages
+    
+    if(search)
+      a.button(href=`/books?search=${search}&page=${n}`)= n++
+    else
+      a.button(href=`/books?page=${n}`)= n++
