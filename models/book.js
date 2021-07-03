@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     genre: DataTypes.STRING,
     year: {
       type: DataTypes.INTEGER,
-      // Adding a validation for the 'year' column
+      // Adding a validation for the 'year' attribute
       validate: {
         isInt: {
           args: true,

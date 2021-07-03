@@ -6,9 +6,7 @@ block content
   p
     a.button(href="/books/new") Create New Book   
   p
-    form(action="") 
-      input(type="search" name="search" placeholder="Title, author, ...")
-      input(type="submit" value="Search")
+    include search
   table
     thead
       tr
@@ -25,3 +23,5 @@ block content
           td=book.author
           td=book.genre
           td=book.year
+  p  
+    include pagination

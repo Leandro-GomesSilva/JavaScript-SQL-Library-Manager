@@ -35,25 +35,44 @@ function asyncHandler(callback) {
 /**************************************/
 router.get('/books', asyncHandler( async (req, res) => {  
   console.log("Home Route called.");
-  let books;
   
-  if (req.query.search) {
+  let books;
+  const search = req.query.search;
+  const page = req.query.page;
+  const booksPerPage = 5;
+
+  if(!search && !page) {
+    res.redirect('/books?page=1');
+    return;
+  } else if (!page) {
+    res.redirect('/books?search=' + search + '&page=1');
+    return;
+  }
+
+  if (search) {
     console.log("Performing search.");
     books = await Book.findAll({    // Storing books related to the Search Query into a variable
-      where: {
+      where: {    // Using an OR operator, matching any substring in any attribute to the query string
         [Op.or]: [
-          { title: {[Op.substring]: req.query.search.toLowerCase()} },
-          { author: {[Op.substring]: req.query.search.toLowerCase()} },
-          { genre: {[Op.substring]: req.query.search.toLowerCase()} },
-          { year: {[Op.substring]: req.query.search.toLowerCase()} },
+          { title: {[Op.substring]: search.toLowerCase()} },
+          { author: {[Op.substring]: search.toLowerCase()} },
+          { genre: {[Op.substring]: search.toLowerCase()} },
+          { year: {[Op.substring]: search.toLowerCase()} },
         ]
-      }
+      },
+      limit: booksPerPage,
+      offset: (page - 1) * booksPerPage
     });   
   }  else {
-    books = await Book.findAll();   // In case the search query from the req object is empty, stores all books from the Model into a variable
+    books = await Book.findAll({ limit: booksPerPage, offset: (page - 1) * booksPerPage });     // In case the search query from the req object is empty, stores all books from the Model into a variable
   }  
   
-  res.render('index', { books: books, title: "SQL Library Manager" });    // Rendering the template with the books list
+  const numberOfBooks = await Book.count();
+
+  const numberOfPages = Math.ceil(numberOfBooks/booksPerPage);
+
+
+  res.render('index', { title: "SQL Library Manager", books, search, numberOfPages });    // Rendering the template with the books list
 }));
 
 
