@@ -13,4 +13,5 @@
 
 ## Extras:
   - Validation for the 'year' attribute/column
+  - Extra Pug templates for error-message, pagination buttons and search feature
   - Custom CSS layout
