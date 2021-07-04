@@ -177,7 +177,7 @@ input[type=text], input[type=search] {
 
 /* New rule  */
 input[type=text]:hover, input[type=search]:hover {
-  background-color: #443cbb1f;    /* Removing border  */
+  background-color: #443cbb1f;
 }
 
 .error {
