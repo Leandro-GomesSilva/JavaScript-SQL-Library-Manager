@@ -100,7 +100,7 @@ router.post('/books/new', asyncHandler( async (req, res) => {
 
   } catch (error) {
 
-    if (error.name === "SequelizeValidationError") {    // In case a sequelize validation error is thrown, this if block will run
+    if (error.name === "SequelizeValidationError") {    // In case a sequelize validation error is thrown, this 'if' block will run
       book = await Book.build(req.body);    // Saving the previous entered form information into a variable
       res.render('new-book', { title: "New Book", book, validationErrors: error.errors })   // Re-rendering the 'new-book' and passing the previously entered book information and the error object to the template
     }
