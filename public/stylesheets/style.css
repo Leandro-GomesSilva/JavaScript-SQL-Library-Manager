@@ -1,11 +1,13 @@
 body {
   padding: 10px 50px 50px;
-  font: 18px "Garamond", serif;
+  font: 18px "Gotham Rounded A", "Gotham Rounded B", "Gotham Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: rgba(237,239,240,1);
 }
 
 /*  New style */
 h1.main-title {
   text-align: center;
+  font-size: 3rem;
 }
 
 /*  New style */
@@ -71,8 +73,14 @@ table {
   font-family: "Gill Sans", sans-serif;
   font-size: 14px;
   font-weight: bolder;
+  background-color: white;
   border-collapse: collapse;
   text-align: left;
+  box-shadow: 5px 5px 10px #2424248f;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
 }
 
 th {
@@ -117,9 +125,11 @@ td a:hover {
   transition: 0.4s;
 }
 
-/*  New rules to make the top corners of the border rounder  */
+/*  New rules to make the top corners of the border rounder */
 tr:first-child th:first-child { border-top-left-radius: 7px; }
 tr:first-child th:last-child { border-top-right-radius: 7px; }
+tr:last-child td:first-child { border-bottom-left-radius: 7px; }
+tr:last-child td:last-child { border-bottom-right-radius: 7px; }
 
 /* Rules to determine the width of each column  */
 .title-cell { width: 40% }
@@ -146,6 +156,11 @@ input {
 input[type=text] {
   margin-left: 7px;
   width: 300px;
+}
+
+/* New rule  */
+input[type=text], input[type=search] {
+  border: 0;    /* Removing border  */
 }
 
 .error {
