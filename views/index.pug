@@ -2,26 +2,27 @@ extends layout
 
 block content
 
-  h1 SQL Library Manager
-  p
-    a.button(href="/books/new") Create New Book   
-  p
-    include search
+  h1.main-title SQL Library Manager
+  div.top-container
+    div.button-container
+      a.button(href="/books/new") Create New Book   
+    div.search-container
+      include search
   table
     thead
       tr
-        th Title
-        th Author
-        th Genre 
-        th Year 
+        th(class="title-cell") Title
+        th(class="author-cell") Author
+        th(class="genre-cell") Genre 
+        th(class="year-cell") Year 
     tbody
       
       each book in books
         tr
-          td
+          td(class="title-cell")
             a(href="/books/" + book.id)=book.title
-          td=book.author
-          td=book.genre
-          td=book.year
-  p  
+          td(class="author-cell")=book.author
+          td(class="genre-cell")=book.genre
+          td(class="year-cell")=book.year
+  div  
     include pagination

@@ -3,6 +3,6 @@
 while n <= numberOfPages
     
     if(search)
-      a.button(href=`/books?search=${search}&page=${n}`)= n++
+      a.button.pagination(href=`/books?search=${search}&page=${n}`)= n++
     else
-      a.button(href=`/books?page=${n}`)= n++
+      a.button.pagination(href=`/books?page=${n}`)= n++
