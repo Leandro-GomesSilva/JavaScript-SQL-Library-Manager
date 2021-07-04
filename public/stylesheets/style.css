@@ -158,9 +158,26 @@ input[type=text] {
   width: 300px;
 }
 
+/* New rule */
+input[type=search] {
+  width: 170px;
+  transition-property: width;
+  transition-duration: 0.5s;
+}
+
+/* New rule  */
+input[type=search]:focus {
+  width: 250px;
+}
+
 /* New rule  */
 input[type=text], input[type=search] {
   border: 0;    /* Removing border  */
+}
+
+/* New rule  */
+input[type=text]:hover, input[type=search]:hover {
+  background-color: #443cbb1f;    /* Removing border  */
 }
 
 .error {
