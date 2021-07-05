@@ -36,16 +36,16 @@ module.exports = (sequelize, DataTypes) => {
     genre: DataTypes.STRING,
     year: {
       type: DataTypes.INTEGER,
-      // Adding a validation for the 'year' attribute
+      allowNull: true,
+      // Adding a custom validation for the 'year' attribute to match integers and integers in the fornmat YYYY
       validate: {
-        isInt: {
-          args: true,
-          msg: 'The field "Year" must be an integer.',
-        },
-        len: {
-          args: [4,4],
-          msg: 'The field "Year" must be in the format YYYY.',
-        },
+        customValidation (value) {
+          if ( this.year && isNaN(value) ) {    // If 'year' is empty i.e. 'falsy', this block will be skipped
+            throw new Error('The field "Year" must be an integer.');
+          } else if ( this.year && /^\d{4}$/.test(value) == false ) {   // If 'year' is empty i.e. 'falsy', this block will be skipped
+            throw new Error('The field "Year" must be in the format YYYY.');
+          }
+        }
       }
     }
   }, {

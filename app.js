@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 
   console.log(err.message, "Error status:", err.status);    // Displaying error message and status on the console (not specified in the instructions)
   res.status(err.status);   // Setting the response status to the error status (not specified in the instructions)
-  res.render('page-not-found', {err, title: "Page not Found"});
+  res.render('page-not-found', {err, title: "Page Not Found"});
   
   next(err);
 });

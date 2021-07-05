@@ -111,10 +111,22 @@ router.post('/books/new', asyncHandler( async (req, res) => {
 /**************************************
 /*       Update Book GET-route        *
 /**************************************/
-router.get('/books/:id', asyncHandler( async (req, res) => {  
-  console.log('Update Book route called.');
+router.get('/books/:id', asyncHandler( async (req, res, next) => {  
+  
   const book = await Book.findByPk(req.params.id);    // Selecting the book with the corresponding ID from the database
-  res.render('update-book', { book });    // Rendering 'update-book' and passing the corresponding book entry from the database to the pug template
+  
+  if (book) {
+    console.log('Update Book route called.');
+    res.render('update-book', { book });    // Rendering 'update-book' and passing the corresponding book entry from the database to the pug template
+
+  } else {    /* Handling invalid book IDs */
+    const err = new Error(`Page not found. ${req.params.id} is not a valid book ID. Click the Home button to return to the home screen.`);
+    err.status = 404;
+    console.log(err.message, "Error status:", err.status);    // Displaying error message and status on the console (not specified in the instructions)
+    res.status(err.status);   // Setting the response status to the error status (not specified in the instructions)
+    res.render('page-not-found', {err, title: "Page Not Found - Invalid Book ID"});
+    next(err);
+  }
 }));
 
 
